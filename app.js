@@ -325,6 +325,13 @@ async function drawChart() {
       .attr("x", 90)
       .attr("y", 125)
       .attr("font-size", 16);
+	  
+	subTitle
+	  .append("text")
+	  .text("作者 田宏志、龚峰")
+	  .attr("x", 90)
+	  .attr("y", 160)
+	  .attr("font-size", 16);
 
     subTitle
       .append("a")
