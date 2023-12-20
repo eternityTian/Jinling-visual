@@ -33,4 +33,4 @@ jobs:
           password: ${{ secrets.JINLING_USERNAME }}
           script: |
           	# 此脚本是放到服务器自定义的目录上，此处写你脚本对应的路径就可以了
-            sh /root/docker/lianjia/start-jinling.sh
+            sh /root/docker/jinling/start-jinling.sh
