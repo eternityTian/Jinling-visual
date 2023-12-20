@@ -31,6 +31,6 @@ jobs:
           host: ${{ secrets.JINLING_HOST }}
           username: ${{ secrets.JINLING_PASSWORD }}
           password: ${{ secrets.JINLING_USERNAME }}
-          script: |
+          script:
           	# 此脚本是放到服务器自定义的目录上，此处写你脚本对应的路径就可以了
             sh /root/docker/jinling/start-jinling.sh
