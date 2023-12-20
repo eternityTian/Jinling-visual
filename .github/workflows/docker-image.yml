@@ -31,5 +31,6 @@ jobs:
           host: ${{ secrets.JINLING_HOST }}
           username: ${{ secrets.JINLING_PASSWORD }}
           password: ${{ secrets.JINLING_USERNAME }}
+		  port: 22
           script: |
             sh /root/docker/j/start-jinling.sh
