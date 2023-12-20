@@ -29,8 +29,8 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.JINLING_HOST }}
-          username: ${{ secrets.JINLING_PASSWORD }}
-          password: ${{ secrets.JINLING_USERNAME }}
+          username: ${{ secrets.JINLING_USERNAME }}
+          password: ${{ secrets.JINLING_PASSWORD }}
           port: 22
           script: |
             sh /root/docker/j/start-jinling.sh
