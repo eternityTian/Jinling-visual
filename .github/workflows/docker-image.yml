@@ -26,7 +26,7 @@ jobs:
 
       # 连接 ssh 执行启动服务的脚本
       - name: SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.JINLING_HOST }}
           username: ${{ secrets.JINLING_PASSWORD }}
