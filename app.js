@@ -1,5 +1,5 @@
 async function drawChart() {
-  const data = await d3.json("./data.json");
+  const data = await d3.json("./data/jinling_poetry.json");
 
   const svg = d3.select("#chart");
   const bounds = svg.append("g");
@@ -7,6 +7,7 @@ async function drawChart() {
   // console.log([...new Set(data.map((d) => d.style))]);
   // ["Surrealism", "Realism", "Expressionism", "Cubism", "Op Art", "Art Nouveau (Modern)", "Northern Renaissance", "Art Deco"]
 
+  /* 
   data.map((d) => {
     d.date = d.date !== "?" ? +d.date : "?";
     d.style = d.style === "Op Art" ? "Optical art" : d.style;
@@ -21,8 +22,9 @@ async function drawChart() {
       : "Other";
   });
   console.log(data);
+  */
 
-  // https://observablehq.com/@d3/d3-group
+/*  // https://observablehq.com/@d3/d3-group
   const styleCountMap = d3.rollup(
     data,
     (v) => v.length,
@@ -32,7 +34,7 @@ async function drawChart() {
   const styleCount = [];
   for (const [style, count] of styleCountMap) {
     styleCount.push({ style, count });
-  }
+  } */
   // console.log(styleCount);
   // drawStyleLegend() 里会用到
 
@@ -44,8 +46,23 @@ async function drawChart() {
   // 1948-1957 = 27 * 3 = 81 // 416
   // 1958-1972 = 14*3-1 = 41 // 457
   // 1973- = 13
-  const dateGroup = d3.range(7).map(() => []);
+  // 分八个朝代
+  const dateGroup = d3.range(8).map(() => []);
+  const dynastyMap = new Map();
+  const dynastiesArray = ['南唐', '明', '元', '当代', '宋', '六朝', '唐', '清'];
+  dynastiesArray.forEach((dynasty, index) => {
+      dynastyMap.set(dynasty, index);
+  });
   data.forEach((d) => {
+	dynasty = d.dynasty;
+	const index = dynastyMap.get(dynasty);
+    if (index !== undefined) {
+        dateGroup[index].push(d);
+    } else {
+        console.error(`Dynasty "${dynasty}" not found in dynastyMap.`);
+    }
+  });
+  /* data.forEach((d) => {
     date = d.date;
     if (date === "?") dateGroup[6].push(d);
     else if (date < 1918) dateGroup[0].push(d);
@@ -54,7 +71,7 @@ async function drawChart() {
     else if (date < 1948) dateGroup[3].push(d);
     else if (date < 1958) dateGroup[4].push(d);
     else if (date < 1973) dateGroup[5].push(d);
-  });
+  }); */
   console.log(dateGroup);
   // getXY() 里年龄段已经通过索引 idx 分段写死；这里 dateGroup 仅供个人浏览
 
