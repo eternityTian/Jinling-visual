@@ -21,6 +21,7 @@ svg {
   opacity: 0;
   position: absolute;
   min-width: 260px;
+  max-width: 275px;
   top: -12px;
   left: 0px;
   padding: 10px;
@@ -32,7 +33,7 @@ svg {
 }
 
 .tooltip-title {
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .tooltip-date {
@@ -40,16 +41,31 @@ svg {
 }
 
 .tooltip-type {
-  font-size: 0.6em;
+  font-size: 0.8em;
+  margin-top: 0.4em;
+  margin-bottom: 1em;
 }
 
-.tooltip-image img {
+.tooltip-content {
+	letter-spacing: 1px;
+	text-align: left;
+  font-size: 1em;
+}
+
+/* .tooltip-image img {
   width: 150px;
   height: 200px;
-}
+} */
 
 .tooltip-url a {
   text-decoration: none;
   color: #5991c2;
   font-size: 0.8em;
 }
+
+/* .other-content {
+	overflow: hidden;
+	background-color: red;
+	height: auto;
+	width: 500%;
+} */

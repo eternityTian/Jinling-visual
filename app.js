@@ -7,24 +7,27 @@ async function drawChart() {
   // console.log([...new Set(data.map((d) => d.style))]);
   // ["Surrealism", "Realism", "Expressionism", "Cubism", "Op Art", "Art Nouveau (Modern)", "Northern Renaissance", "Art Deco"]
 
-  /* 
+  
   data.map((d) => {
     d.date = d.date !== "?" ? +d.date : "?";
     d.style = d.style === "Op Art" ? "Optical art" : d.style;
-    d.style2 = [
-      "Surrealism",
-      "Realism",
-      "Expressionism",
-      "Cubism",
-      "Optical art",
-    ].includes(d.style)
-      ? d.style
-      : "Other";
-  });
-  console.log(data);
-  */
+	d.style2 = d.style;
+	});
+  //   d.style2 = [
+  //     "乐府诗",
+  //     "五言古体诗",
+  //     "四言古体诗",
+  //     "七言古体诗",
+  //     "杂言诗",
+	 //  ""
+  //   ].includes(d.style)
+  //     ? d.style
+  //     : "未知";
 
-/*  // https://observablehq.com/@d3/d3-group
+  console.log(data);
+ 
+
+ // https://observablehq.com/@d3/d3-group
   const styleCountMap = d3.rollup(
     data,
     (v) => v.length,
@@ -34,7 +37,7 @@ async function drawChart() {
   const styleCount = [];
   for (const [style, count] of styleCountMap) {
     styleCount.push({ style, count });
-  } */
+  }
   // console.log(styleCount);
   // drawStyleLegend() 里会用到
 
@@ -49,7 +52,7 @@ async function drawChart() {
   // 分八个朝代
   const dateGroup = d3.range(8).map(() => []);
   const dynastyMap = new Map();
-  const dynastiesArray = ['南唐', '明', '元', '当代', '宋', '六朝', '唐', '清'];
+  const dynastiesArray = ['六朝','唐', '南唐', '宋',  '元', '明', '清', '当代'];
   dynastiesArray.forEach((dynasty, index) => {
       dynastyMap.set(dynasty, index);
   });
@@ -76,24 +79,28 @@ async function drawChart() {
   // getXY() 里年龄段已经通过索引 idx 分段写死；这里 dateGroup 仅供个人浏览
 
   const colorScale = {
-    "Optical art": "#ffc533",
-    Surrealism: "#f25c3b",
-    Expressionism: "#5991c2",
-    Realism: "#55514e",
-    Cubism: "#5aa459",
-    Other: "#bdb7b7",
+    "五言古体诗": "#ffc533",
+	"杂言诗": "#f25c3b",
+    "乐府诗": "#5991c2",
+    "四言古体诗": "#55514e",
+    "七言古体诗": "#5aa459",
+    "未知": "#bdb7b7",
+	"词": "#5fb9bd"
   };
 
+  const getXYByGroupInfo = (groupId, id) => {
+	  
+  }
   const getXY = (idx) => {
     let col;
     let row;
-    if (idx < 14) {
-      col = 1;
+    if (idx < 25) {
+	  groupIdx = idx;
+      col = 0 + parseInt(groupIdx / 24) + 1;
       row = parseInt((idx % 24) / 3) + 1;
-      groupIdx = idx;
     } else if (idx < 99) {
       groupIdx = idx - 14;
-      col = 1 + parseInt(groupIdx / 24) + 1;
+      col = 2 + parseInt(groupIdx / 24) + 1;
       row = parseInt((groupIdx % 24) / 3) + 1;
     } else if (idx < 273) {
       groupIdx = idx - 99;
@@ -163,7 +170,7 @@ async function drawChart() {
   function drawBlankArtwork() {
     // bottom odd 9 / even 10
     const rawMax = [
-      5,
+      8,
       8,
       8,
       8,
@@ -187,7 +194,7 @@ async function drawChart() {
       6,
       5,
     ];
-    // console.log(rawMax.length); // 23
+    // 加空白
     const blank = [];
     d3.range(1, 24).map((d) => {
       // top odd 0/-1 / even 0
@@ -196,10 +203,10 @@ async function drawChart() {
         : blank.push({ x: d, y: 0 }, { x: d, y: -1 });
       // bottom odd 9 / even 10
       if (d % 2 === 0) {
-        for (let i = rawMax[d - 1] + 1; i <= 10; i++)
+        for (let i = rawMax[d - 1] + 1; i <= 11; i++)
           blank.push({ x: d, y: i });
       } else {
-        for (let i = rawMax[d - 1] + 1; i <= 9; i++) blank.push({ x: d, y: i });
+        for (let i = rawMax[d - 1] + 1; i <= 10; i++) blank.push({ x: d, y: i });
       }
     });
     // console.log(blank);
@@ -210,7 +217,7 @@ async function drawChart() {
       d3.range(3).map(() => blankData.push({ x: d.x, y: d.y }));
     });
     const specialBlank = [
-      { x: 1, y: 5, unit: 2 },
+      { x: 1, y: 5, unit: 3 },
       { x: 5, y: 5, unit: 1 },
       { x: 5, y: 5, unit: 2 },
       { x: 16, y: 5, unit: 2 },
@@ -259,16 +266,14 @@ async function drawChart() {
   // .on('mouseleave', onMouseLeave)
 
   function showTooltip(datum) {
-    // console.log(this)
+    console.log(this)
+	console.log(datum)
     tooltip.style("opacity", 1);
     tooltip.select("#title").text(datum.title);
-    tooltip
-      .select("#date")
-      .text(datum.date !== "?" ? datum.date : "Year Unknown");
-    tooltip.select("#style").text(datum.style);
-    tooltip.select("#genre").text(datum.genre);
-    tooltip.select("#image img").attr("src", datum.img);
-    tooltip.select("#url a").attr("href", datum.url);
+	tooltip.select("#author").text(datum.author);
+	tooltip.select("#style").text(datum.style);
+	tooltip.select("#content").text(datum.content);
+	//tooltip.select("#other-content").text(datum.other_content);
 
     let [x, y] = d3.mouse(this);
     // console.log(x, y);
@@ -284,15 +289,18 @@ async function drawChart() {
   // }
 
   function drawDateInfo() {
-    const dateText = [
-      { col: 1, shortLine: false, age: "age<20", range: "1898-" },
-      { col: 2, shortLine: true, age: "20-29", range: "1918-1927" },
-      { col: 6, shortLine: true, age: "30-39", range: "1928-1937" },
-      { col: 14, shortLine: true, age: "40-49", range: "1938-1947" },
-      { col: 17, shortLine: false, age: "50-59", range: "1948-1957" },
-      { col: 21, shortLine: false, age: "60-69", range: "1958-1972" },
-      { col: 23, shortLine: false, age: "", range: "Year Unknown" },
-    ];
+    const dateText = [
+          { col: 1, shortLine: false, age: "", range: "222-598" },
+          { col: 2, shortLine: true, age: "", range: "618-907" },
+          { col: 6, shortLine: true, age: "", range: "937-975" },
+          { col: 14, shortLine: true, age: "", range: "960-1279" },
+          { col: 17, shortLine: false, age: "", range: "1271-1368" },
+          { col: 21, shortLine: false, age: "", range: "1368-1644" },
+          { col: 23, shortLine: false, age: "", range: "1616-1912" },
+          { col: 25, shortLine: false, age: "", range: "1949- " },
+          { col: 27, shortLine: false, age: "", range: "未知" },
+        ];
+	dateText.forEach((item,index) => {item.age = dynastiesArray[index]})
     const dateTextGroup = artworkGroup.selectAll("g").data(dateText).join("g");
 
     dateTextGroup

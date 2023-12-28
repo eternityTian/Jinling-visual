@@ -1,7 +1,7 @@
 import csv
 import json
 
-csv_file_path = '../data/金陵历朝诗歌.csv'  
+csv_file_path = '../data/new_data.csv'  
 json_file_path = '../data/jinling_poetry.json'
 
 data = []
