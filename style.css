@@ -17,6 +17,12 @@ svg {
   height: 100vh;
 }
 
+/* #main {
+	position: relative;
+	float:left;
+	overflow-y: scroll;
+} */
+
 .tooltip {
   opacity: 0;
   position: absolute;
@@ -62,10 +68,3 @@ svg {
   color: #5991c2;
   font-size: 0.8em;
 }
-
-/* .other-content {
-	overflow: hidden;
-	background-color: red;
-	height: auto;
-	width: 500%;
-} */

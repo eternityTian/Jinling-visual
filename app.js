@@ -149,10 +149,7 @@ async function drawChart() {
 
 	// 方法1
 	const cubeWidth = 32;
-	// 方法2
-	// const cubeWidth = (32 / 2) * Math.sqrt(3); // 36; // 40
-
-	//  2%3=2  parseInt(4/3)=1  or Math.floor(4/3)
+	
 	const artworkGroup = bounds
 		.append("g")
 		.attr("class", "main-chart")
@@ -472,27 +469,6 @@ async function drawChart() {
 	}
 	drawTitle();
 
-	// piece example
-	function drawAnno() {
-		const anno = bounds.append("g").attr("transform", "translate(530, 25)");
-
-		const annoArtwork = anno
-			.append("use")
-			.attr("xlink:href", "#unit-0")
-			.attr("fill", "#bdb7b7")
-			.attr("x", 120)
-			.attr("y", -30);
-
-		const annoText = anno
-			.append("text")
-			.text("A piece of artwork(click it)")
-			.attr("x", 180)
-			.attr("y", 100)
-			.attr("fill", "grey")
-			.attr("font-size", 13);
-	}
-	drawAnno();
-
 	// style bar chart
 	function drawStyleLegend() {
 		const countScale = d3
@@ -607,7 +583,7 @@ async function drawChart() {
 
 		descRight
 			.append("text")
-			.text("Origin: Tableau | Wendy Shijia | @ShijiaWendy | 24 August 2020 | ")
+			.text("Origin: Jinling-visual | 小猫猫爱摸鱼 | 27 December 2023 | ")
 			.attr("x", 604)
 			.attr("y", 680)
 			.attr("font-size", 12);
@@ -616,29 +592,29 @@ async function drawChart() {
 			.append("a")
 			.attr(
 				"href",
-				"https://public.tableau.com/profile/wendy.shijia#!/vizhome/MCEschersGallery_15982882031370/Gallery"
+				"https://github.com/eternityTian/Jinling-visual"
 			)
 			.attr("target", "_blank")
 			.append("text")
-			.text("Tableau: Wendy Shijia/Escher's Gallery")
-			.attr("x", 970)
+			.text("eternityTian/Jinling-visual")
+			.attr("x", 964)
 			.attr("y", 680)
 			.attr("fill", "#5991c2")
 			.attr("font-size", 12);
 
 		descRight
 			.append("text")
-			.text("Reproduced: D3.js | 古柳Guliu | @Deserts_X | 22 October 2020 | ")
+			.text("Quote: D3.js | Mike Bostock | @d3 | 27 December 2023 | ")
 			.attr("x", 604)
 			.attr("y", 700)
 			.attr("font-size", 12);
 
 		descRight
 			.append("a")
-			.attr("href", "https://github.com/DesertsX/dataviz-in-action")
+			.attr("href", "https://github.com/d3/d3")
 			.attr("target", "_blank")
 			.append("text")
-			.text("GitHub: DesertsX/dataviz-in-action")
+			.text("GitHub: d3/d3")
 			.attr("x", 964)
 			.attr("y", 700)
 			.attr("fill", "#5991c2")
