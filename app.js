@@ -1,39 +1,29 @@
 async function drawChart() {
+	// 导入数据
 	const data = await d3.json("./data/jinling_poetry.json");
 
+	// 选中svg标签
 	const svg = d3.select("#chart");
+	
+	// 添加g元素，在svg下绘制
 	const bounds = svg.append("g");
 
-	// console.log([...new Set(data.map((d) => d.style))]);
-	// ["Surrealism", "Realism", "Expressionism", "Cubism", "Op Art", "Art Nouveau (Modern)", "Northern Renaissance", "Art Deco"]
-
-
-	data.map((d) => {
+	data.map((d) => {// 处理下样式，赋值给style2，后续统计也可使用
 		d.date = d.date !== "?" ? +d.date : "?";
-		d.style = d.style === "Op Art" ? "Optical art" : d.style;
 		d.style2 = d.style;
 	});
-	//   d.style2 = [
-	//     "乐府诗",
-	//     "五言古体诗",
-	//     "四言古体诗",
-	//     "七言古体诗",
-	//     "杂言诗",
-	//  ""
-	//   ].includes(d.style)
-	//     ? d.style
-	//     : "未知";
 
 	console.log(data);
 
 
-	// https://observablehq.com/@d3/d3-group
+	// https://observablehq.com/@d3/d3-group 记录文体数据map
 	const styleCountMap = d3.rollup(
 		data,
 		(v) => v.length,
 		(d) => d.style2
 	);
 	// console.log("styleCount :", styleCountMap);
+	// 分类文体，计算各文体数量
 	const styleCount = [];
 	for (const [style, count] of styleCountMap) {
 		styleCount.push({
@@ -42,16 +32,7 @@ async function drawChart() {
 		});
 	}
 	console.log(styleCount);
-	// drawStyleLegend() 里会用到
-
-	// 一列最多8组共24个；分成7个年龄组
-	// 1898-1917 = 14
-	// 1918-1927 = 28*3+1 = 85 // 99
-	// 1928-1937 = 7*8*3+6 = 174 // 273
-	// 1938-1947 = 62 // 335
-	// 1948-1957 = 27 * 3 = 81 // 416
-	// 1958-1972 = 14*3-1 = 41 // 457
-	// 1973- = 13
+	
 	// 分八个朝代
 	const dateGroup = d3.range(8).map(() => []);
 	const dynastyMap = new Map();
@@ -68,19 +49,10 @@ async function drawChart() {
 			console.error(`Dynasty "${dynasty}" not found in dynastyMap.`);
 		}
 	});
-	/* data.forEach((d) => {
-	  date = d.date;
-	  if (date === "?") dateGroup[6].push(d);
-	  else if (date < 1918) dateGroup[0].push(d);
-	  else if (date < 1928) dateGroup[1].push(d);
-	  else if (date < 1938) dateGroup[2].push(d);
-	  else if (date < 1948) dateGroup[3].push(d);
-	  else if (date < 1958) dateGroup[4].push(d);
-	  else if (date < 1973) dateGroup[5].push(d);
-	}); */
+	
 	console.log(dateGroup);
-	// getXY() 里年龄段已经通过索引 idx 分段写死；这里 dateGroup 仅供个人浏览
 
+	// 不同文体，不同颜色
 	const colorScale = {
 		"未知": "#ffc533",
 		"五言古体诗": "#ff5500",
@@ -88,7 +60,6 @@ async function drawChart() {
 		"乐府诗": "#5991c2",
 		"四言古体诗": "#55514e",
 		"七言古体诗": "#5aa459",
-		// "未知": "#bdb7b7",
 		"词": "#5fb9bd",
 		"七言律绝": "#a0bd0e",
 		"七言律诗": "#0ebdaf",
@@ -104,10 +75,8 @@ async function drawChart() {
 		"地方志": "#a2bba3",
 		"序跋文": "#55aaff",
 	};
-
-	const getXYByGroupInfo = (groupId, id) => {
-
-	}
+	
+	// 数据集按id排序过，代码件script，此处通过id定位绘制位置
 	const getXY = (idx) => {
 		let col;
 		let row;
@@ -147,9 +116,9 @@ async function drawChart() {
 		return [groupIdx, col, row];
 	};
 
-	// 方法1
-	const cubeWidth = 32;
 	
+	const cubeWidth = 32;
+	// 绘制主图表，诗歌分布
 	const artworkGroup = bounds
 		.append("g")
 		.attr("class", "main-chart")
@@ -167,7 +136,7 @@ async function drawChart() {
 				getXY(i)[0] % 3 === 1 ?
 				"#unit-1" :
 				"#unit-2"
-			)
+			)// 每三个作为一组，每组上、斜左、斜右
 			.attr("fill", (d) => colorScale[d.style2])
 			.attr("stroke", "white")
 			.attr("data-index", (d) => d.style2)
@@ -186,7 +155,7 @@ async function drawChart() {
 	drawArtwork();
 
 	function drawBlankArtwork() {
-		// bottom odd 9 / even 10
+		// 每列最多，后续用于补充空白部分虚格子
 		const rawMax = [
 			8,
 			8,
@@ -274,16 +243,9 @@ async function drawChart() {
 			}));
 		});
 		const specialBlank = [
-			// { x: 50, y: 3, unit: 3 },
-			// { x: 5, y: 5, unit: 1 },
-			// { x: 5, y: 5, unit: 2 },
-			// { x: 16, y: 5, unit: 2 },
-			// { x: 22, y: 6, unit: 2 },
-			// { x: 23, y: 5, unit: 1 },
-			// { x: 23, y: 5, unit: 2 },
 		];
 		blankData = [...blankData, ...specialBlank];
-
+		// 绘制空白格
 		const blankArtworks = artworkGroup
 			.selectAll("use.blank")
 			.data(blankData)
@@ -311,6 +273,7 @@ async function drawChart() {
 
 	drawBlankArtwork();
 
+	// 取顶部标题绘制顶部朝代信息
 	const tooltip = d3.select("#tooltip");
 
 	svg.on("click", displayTooltip);
@@ -330,7 +293,6 @@ async function drawChart() {
 		tooltip.select("#author").text(datum.author);
 		tooltip.select("#style").text(datum.style);
 		tooltip.select("#content").text(datum.content);
-		//tooltip.select("#other-content").text(datum.other_content);
 
 		let [x, y] = d3.mouse(this);
 		// console.log(x, y);
@@ -341,10 +303,7 @@ async function drawChart() {
 		d3.event.stopPropagation();
 	}
 
-	// function onMouseLeave() {
-	//     tooltip.style('opacity', 0)
-	// }
-
+	// 绘制朝代范围和数据
 	function drawDateInfo() {
 		const dateText = [{
 				col: 1,
@@ -394,13 +353,14 @@ async function drawChart() {
 				age: "",
 				range: "1949- "
 			},
-			//       { col: 27, shortLine: false, age: "", range: "未知" },
 		];
+		// 遍历朝代文本及时间范围
 		dateText.forEach((item, index) => {
 			item.age = dynastiesArray[index]
 		})
 		const dateTextGroup = artworkGroup.selectAll("g").data(dateText).join("g");
-
+		
+		// 绘制
 		dateTextGroup
 			.append("text")
 			.text((d) => d.age)
@@ -428,8 +388,9 @@ async function drawChart() {
 			.attr("stroke-dasharray", "1px 1px");
 	}
 
-	drawDateInfo();
+	drawDateInfo();//绘制数据信息
 
+	// 绘制标题
 	function drawTitle() {
 		// title
 		const title = bounds
@@ -469,21 +430,22 @@ async function drawChart() {
 	}
 	drawTitle();
 
-	// style bar chart
+	// 绘制诗歌文体分布
 	function drawStyleLegend() {
 		const countScale = d3
 			.scaleLinear()
 			.domain([0, d3.max(styleCount, (d) => d.count)])
 			.range([0, 200]);
 
-		const legend = bounds.append("g").attr("transform", "translate(1000, 40)");
+		const legend = bounds.append("g").attr("transform", "translate(900, 40)");
 
 		const legendTitle = legend
 			.append("text")
-			.text("各朝代的诗歌数量占比")
+			.text("诗歌文体分布情况")
 			.attr("x", 20)
 			.attr("y", 10);
 
+		// 先绘制前10个
 		const legendGroup = legend
 			.selectAll("g")
 			.data((styleCount.sort((a, b) => b.count - a.count)).slice(0,10))
@@ -516,18 +478,18 @@ async function drawChart() {
 
 	drawStyleLegend();
 	
-	// style bar chart
+	// 绘制诗歌文体分布情况2，绘制排序后9个，在其右侧绘制
 	function drawStyleLegend2() {
 		const countScale = d3
 			.scaleLinear()
 			.domain([0, d3.max(styleCount, (d) => d.count)])
 			.range([0, 200]);
 	
-		const legend = bounds.append("g").attr("transform", "translate(1350, 40)");
+		const legend = bounds.append("g").attr("transform", "translate(1250, 40)");
 	
 		const legendGroup = legend
 			.selectAll("g")
-			.data((styleCount.sort((a, b) => b.count - a.count)).slice(10,19))
+			.data((styleCount.sort((a, b) => b.count - a.count)).slice(10,19))//截取后九个
 			.join("g")
 			.attr("transform", (d, i) => `translate(110, ${28 + 15 * i})`);
 	
@@ -557,7 +519,7 @@ async function drawChart() {
 	
 	drawStyleLegend2();
 
-	// data source  // author
+	// 描述信息，数据源链接、仓库、团队和引用的三方d3.js库地址
 	function drawDesc() {
 		const descLeft = artworkGroup.append("g").attr("class", "desc-left");
 
@@ -620,14 +582,8 @@ async function drawChart() {
 			.attr("fill", "#5991c2")
 			.attr("font-size", 12);
 
-		// Wendy Shijia @ShijiaWendy
-		// https://twitter.com/ShijiaWendy/status/1297950623141203968
-
-		// https://github.com/DesertsX/dataviz-in-action
-		// @Deserts_X
-		// https://twitter.com/Deserts_X
 	}
 	drawDesc();
 }
 
-drawChart();
+drawChart(); // 异步绘制svg
