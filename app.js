@@ -510,7 +510,7 @@ async function drawChart() {
 
 		const legendGroup = legend
 			.selectAll("g")
-			.data(styleCount.sort((a, b) => b.count - a.count))
+			.data((styleCount.sort((a, b) => b.count - a.count)).slice(0,10))
 			.join("g")
 			.attr("transform", (d, i) => `translate(110, ${28 + 15 * i})`);
 
@@ -539,6 +539,47 @@ async function drawChart() {
 	}
 
 	drawStyleLegend();
+	
+	// style bar chart
+	function drawStyleLegend2() {
+		const countScale = d3
+			.scaleLinear()
+			.domain([0, d3.max(styleCount, (d) => d.count)])
+			.range([0, 200]);
+	
+		const legend = bounds.append("g").attr("transform", "translate(1350, 40)");
+	
+		const legendGroup = legend
+			.selectAll("g")
+			.data((styleCount.sort((a, b) => b.count - a.count)).slice(10,19))
+			.join("g")
+			.attr("transform", (d, i) => `translate(110, ${28 + 15 * i})`);
+	
+		const lengedStyleText = legendGroup
+			.append("text")
+			.text((d) => d.style) // this's style2
+			.attr("x", -90)
+			.attr("y", 6)
+			.attr("text-anchor", "start")
+			.attr("fill", "grey")
+			.attr("font-size", 11);
+	
+		const lengedRect = legendGroup
+			.append("rect")
+			.attr("width", (d) => countScale(d.count))
+			.attr("height", 8)
+			.attr("fill", (d) => colorScale[d.style]);
+	
+		const lengedStyleCountText = legendGroup
+			.append("text")
+			.text((d) => d.count)
+			.attr("x", (d) => countScale(d.count) + 10)
+			.attr("y", 8)
+			.attr("fill", (d) => colorScale[d.style])
+			.attr("font-size", 11);
+	}
+	
+	drawStyleLegend2();
 
 	// data source  // author
 	function drawDesc() {
@@ -546,18 +587,18 @@ async function drawChart() {
 
 		descLeft
 			.append("text")
-			.text("Data source and images: ")
+			.text("Data source: ")
 			.attr("x", 80)
 			.attr("y", 690)
 			.attr("font-size", 12);
 
 		descLeft
 			.append("a")
-			.attr("href", "https://www.wikiart.org/en/m-c-escher")
+			.attr("href", "https://chinavis.org/2023/challenge.html")
 			.attr("target", "_blank")
 			.append("text")
-			.text("https://www.wikiart.org/en/m-c-escher")
-			.attr("x", 224)
+			.text("https://chinavis.org/2023/challenge.html")
+			.attr("x", 175)
 			.attr("y", 690)
 			.attr("fill", "#5991c2")
 			.attr("font-size", 12);
