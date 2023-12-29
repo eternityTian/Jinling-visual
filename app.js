@@ -437,7 +437,7 @@ async function drawChart() {
 			.domain([0, d3.max(styleCount, (d) => d.count)])
 			.range([0, 200]);
 
-		const legend = bounds.append("g").attr("transform", "translate(900, 40)");
+		const legend = bounds.append("g").attr("transform", "translate(1800, 40)");
 
 		const legendTitle = legend
 			.append("text")
@@ -485,7 +485,7 @@ async function drawChart() {
 			.domain([0, d3.max(styleCount, (d) => d.count)])
 			.range([0, 200]);
 	
-		const legend = bounds.append("g").attr("transform", "translate(1250, 40)");
+		const legend = bounds.append("g").attr("transform", "translate(2150, 40)");
 	
 		const legendGroup = legend
 			.selectAll("g")
