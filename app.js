@@ -1,7 +1,7 @@
 async function drawChart() {
   const data = await d3.json("./data/jinling_poetry.json");
 
-  const svg = d3.select("#chart");
+  const svg = d3.select("#chart");	
   const bounds = svg.append("g");
 
   // console.log([...new Set(data.map((d) => d.style))]);
@@ -79,13 +79,27 @@ async function drawChart() {
   // getXY() 里年龄段已经通过索引 idx 分段写死；这里 dateGroup 仅供个人浏览
 
   const colorScale = {
-    "五言古体诗": "#ffc533",
+	"未知": "#ffc533",
+    "五言古体诗": "#ff5500",
 	"杂言诗": "#f25c3b",
     "乐府诗": "#5991c2",
     "四言古体诗": "#55514e",
     "七言古体诗": "#5aa459",
-    "未知": "#bdb7b7",
-	"词": "#5fb9bd"
+    // "未知": "#bdb7b7",
+	"词": "#5fb9bd",
+	"七言律绝": "#a0bd0e",
+	"七言律诗": "#0ebdaf",
+	"五言律诗": "#ebeb0a",
+	"五言律绝": "#b9f6ff",
+	"散曲": "#ffaa7f",
+	"五言排律": "#ffaaff",
+	"六言古体诗": "#bdac98",
+	"四言古体诗": "#bbb505",
+	"七言排律": "#aaaaff",
+	"六言律绝": "#ffff7f",
+	"楚辞": "#aa55ff",
+	"地方志": "#a2bba3",
+	"序跋文": "#55aaff",
   };
 
   const getXYByGroupInfo = (groupId, id) => {
@@ -94,35 +108,46 @@ async function drawChart() {
   const getXY = (idx) => {
     let col;
     let row;
-    if (idx < 25) {
+    if (idx < 162) {
 	  groupIdx = idx;
       col = 0 + parseInt(groupIdx / 24) + 1;
       row = parseInt((idx % 24) / 3) + 1;
-    } else if (idx < 99) {
-      groupIdx = idx - 14;
-      col = 2 + parseInt(groupIdx / 24) + 1;
+    } 
+	else if (idx < 426) {
+      groupIdx = idx - 162;
+      col = 7 + parseInt(groupIdx / 	24) + 1;
       row = parseInt((groupIdx % 24) / 3) + 1;
-    } else if (idx < 273) {
-      groupIdx = idx - 99;
-      col = 5 + parseInt(groupIdx / 24) + 1;
+    } 
+	else if (idx < 500) {
+      groupIdx = idx - 426;
+      col = 18 + parseInt(groupIdx / 24) + 1;
       row = parseInt((groupIdx % 24) / 3) + 1;
-    } else if (idx < 335) {
-      groupIdx = idx - 273;
-      col = 13 + parseInt(groupIdx / 24) + 1;
-      row = parseInt((groupIdx % 24) / 3) + 1;
-    } else if (idx < 416) {
-      groupIdx = idx - 335;
-      col = 16 + parseInt(groupIdx / 24) + 1;
-      row = parseInt((groupIdx % 24) / 3) + 1;
-    } else if (idx < 457) {
-      groupIdx = idx - 416;
-      col = 20 + parseInt(groupIdx / 24) + 1;
-      row = parseInt((groupIdx % 24) / 3) + 1;
-    } else {
-      groupIdx = idx - 457;
+    } 
+	else if (idx < 572) {
+      groupIdx = idx - 500;
       col = 22 + parseInt(groupIdx / 24) + 1;
       row = parseInt((groupIdx % 24) / 3) + 1;
-    }
+    } 
+	else if (idx < 599) {
+	  groupIdx = idx - 572;
+	  col = 25 + parseInt(groupIdx / 24) + 1;
+	  row = parseInt((groupIdx % 24) / 3) + 1;
+	} 
+	else if (idx < 818) {
+	  groupIdx = idx - 599;
+	  col = 27 + parseInt(groupIdx / 24) + 1;
+	  row = parseInt((groupIdx % 24) / 3) + 1;
+	} 
+	else if (idx < 943) {
+	  groupIdx = idx - 818;
+	  col = 37 + parseInt(groupIdx / 24) + 1;
+	  row = parseInt((groupIdx % 24) / 3) + 1;
+	} 
+	else if (idx < 944) {
+	  groupIdx = idx - 943;
+	  col = 43 + parseInt(groupIdx / 24) + 1;
+	  row = parseInt((groupIdx % 24) / 3) + 1;
+	} 
     return [groupIdx, col, row];
   };
 
@@ -174,29 +199,50 @@ async function drawChart() {
       8,
       8,
       8,
-      5,
       8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      2,
-      8,
-      8,
-      5,
-      8,
-      8,
-      8,
-      3,
       8,
       6,
-      5,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      1,
+      8,
+	  8,
+	  8,
+	  8,
+	  1,
+	  8,
+	  8,
+	  8,
+	  8,
+	  8,
+	  8,
+	  8,
+	  8,
+	  8,
+	  1,
+	  8,
+	  8,
+	  8,
+	  8,
+	  8,
+	  2,
+	  1,
     ];
     // 加空白
     const blank = [];
-    d3.range(1, 24).map((d) => {
+    d3.range(1, 45).map((d) => {
       // top odd 0/-1 / even 0
       d % 2 === 0
         ? blank.push({ x: d, y: 0 })
@@ -217,13 +263,13 @@ async function drawChart() {
       d3.range(3).map(() => blankData.push({ x: d.x, y: d.y }));
     });
     const specialBlank = [
-      { x: 1, y: 5, unit: 3 },
-      { x: 5, y: 5, unit: 1 },
-      { x: 5, y: 5, unit: 2 },
-      { x: 16, y: 5, unit: 2 },
-      { x: 22, y: 6, unit: 2 },
-      { x: 23, y: 5, unit: 1 },
-      { x: 23, y: 5, unit: 2 },
+      // { x: 50, y: 3, unit: 3 },
+      // { x: 5, y: 5, unit: 1 },
+      // { x: 5, y: 5, unit: 2 },
+      // { x: 16, y: 5, unit: 2 },
+      // { x: 22, y: 6, unit: 2 },
+      // { x: 23, y: 5, unit: 1 },
+      // { x: 23, y: 5, unit: 2 },
     ];
     blankData = [...blankData, ...specialBlank];
 
@@ -291,14 +337,14 @@ async function drawChart() {
   function drawDateInfo() {
     const dateText = [
           { col: 1, shortLine: false, age: "", range: "222-598" },
-          { col: 2, shortLine: true, age: "", range: "618-907" },
-          { col: 6, shortLine: true, age: "", range: "937-975" },
-          { col: 14, shortLine: true, age: "", range: "960-1279" },
-          { col: 17, shortLine: false, age: "", range: "1271-1368" },
-          { col: 21, shortLine: false, age: "", range: "1368-1644" },
-          { col: 23, shortLine: false, age: "", range: "1616-1912" },
-          { col: 25, shortLine: false, age: "", range: "1949- " },
-          { col: 27, shortLine: false, age: "", range: "未知" },
+          { col: 8, shortLine: true, age: "", range: "618-907" },
+          { col: 19, shortLine: true, age: "", range: "937-975" },
+          { col: 23, shortLine: true, age: "", range: "960-1279" },
+          { col: 26, shortLine: false, age: "", range: "1271-1368" },
+          { col: 28, shortLine: false, age: "", range: "1368-1644" },
+          { col: 38, shortLine: false, age: "", range: "1616-1912" },
+          { col: 44, shortLine: false, age: "", range: "1949- " },
+    //       { col: 27, shortLine: false, age: "", range: "未知" },
         ];
 	dateText.forEach((item,index) => {item.age = dynastiesArray[index]})
     const dateTextGroup = artworkGroup.selectAll("g").data(dateText).join("g");
