@@ -399,6 +399,7 @@ async function drawChart() {
 			.attr("x", 90)
 			.attr("y", 90)
 			.attr("text-anchor", "start")
+			.attr("font-family", "KaiTi")
 			.attr("font-size", 40)
 			.attr("font-weight", "bold");
 
@@ -437,7 +438,10 @@ async function drawChart() {
 			.domain([0, d3.max(styleCount, (d) => d.count)])
 			.range([0, 200]);
 
-		const legend = bounds.append("g").attr("transform", "translate(1800, 40)");
+		const legend = bounds
+			.append("g")
+			.attr("transform", "translate(1900, 40)")
+			.attr("font-family", "KaiTi");
 
 		const legendTitle = legend
 			.append("text")
@@ -485,7 +489,7 @@ async function drawChart() {
 			.domain([0, d3.max(styleCount, (d) => d.count)])
 			.range([0, 200]);
 	
-		const legend = bounds.append("g").attr("transform", "translate(2150, 40)");
+		const legend = bounds.append("g").attr("transform", "translate(2250, 40)").attr("font-family", "KaiTi");
 	
 		const legendGroup = legend
 			.selectAll("g")

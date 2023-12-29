@@ -36,6 +36,7 @@ svg {
   z-index: 10;
   transition: all 0.2s ease-out;
   cursor: pointer;
+  font-family: "KaiTi";
 }
 
 .tooltip-title {
@@ -57,11 +58,6 @@ svg {
 	text-align: left;
   font-size: 1em;
 }
-
-/* .tooltip-image img {
-  width: 150px;
-  height: 200px;
-} */
 
 .tooltip-url a {
   text-decoration: none;
