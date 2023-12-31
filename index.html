@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金陵文脉</title>
+    <!-- 借用古柳GuLiu重现的D3.js version，并在其之上修改了下  -->
+    <link rel="stylesheet" href="./style.css">
+    <script src="./js/d3.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="main">
+            <svg id="chart" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <!-- 方法1 -->
+                <defs>
+                    <polygon id="unit-0" points="0,0 16,0 16,16 32,16 32,32 0,32"
+                        transform="scale(1.4,.8) rotate(-45) translate(-20, 132.3)" />
+                    <polygon id="unit-1" points="0,0 32,0 32,32 16,32 16,16 0,16"
+                        transform="skewY(30) translate(111, 22)" />
+                    <polygon id="unit-2" points="0,0 32,0 32,16 16,16 16,32 0,32"
+                        transform="skewY(-30) translate(143, 187)" />
+                </defs>
+            </svg>
+        </div>
+
+		
+        <div id="tooltip" class="tooltip">
+			<div class="tooltip-title" id="title"></div>
+			<div class="tooltip-type" id="type">
+				<span id='author'></span> | <span id='style'></span>
+			</div>
+			<div class="tooltip-content" id="content"></div>
+        </div>
+    </div>
+    <script src="./app.js"></script>
+</body>
+
+</html>
